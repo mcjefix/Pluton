@@ -90,9 +90,10 @@ namespace Pluton
         {
 
             Player player = new Player(arg.Player());
-            string[] args = arg.ArgsStr.Substring(2, arg.ArgsStr.Length - 3).Replace("\\", "").Split(new string[]{" "}, StringSplitOptions.None);
+            string[] args = arg.ArgsStr.Substring(2, arg.ArgsStr.Length - 3).Replace("\\", "").Split(new string[]{ " " }, StringSplitOptions.None);
 
             Command cmd = new Command(player, args);
+
 
             if (cmd.cmd == "")
                 return;
@@ -116,20 +117,31 @@ namespace Pluton
                     return;
                 }
                 if (cmd.cmd == Config.GetValue("Commands", "ShowLocation")) {
-                    player.Message(player.Location.ToString ());
+                    player.Message(player.Location.ToString());
                     return;
                 }
                 if (cmd.cmd == Config.GetValue("Commands", "ShowOnlinePlayers")) {
-                    string msg = Server.GetServer().Players.Count == 1 ? "You are alone!" : String.Format("There are: {0} players online!", Server.GetServer().Players.Count) ;
+                    string msg = Server.GetServer().Players.Count == 1 ? "You are alone!" : String.Format("There are: {0} players online!", Server.GetServer().Players.Count);
                     player.Message(msg);
                     return;
                 }
-				if (cmd.cmd == Config.GetValue("Commands", "Help")) {
-					foreach (string key in Config.PlutonConfig.EnumSection("HelpMessage")) {
-						player.Message(Config.GetValue("HelpMessage", key));
-					}
-				}
+                if (cmd.cmd == Config.GetValue("Commands", "Help")) {
+                    foreach (string key in Config.PlutonConfig.EnumSection("HelpMessage")) {
+                        player.Message(Config.GetValue("HelpMessage", key));
+                    }
+                }
+
+                if (cmd.cmd == Config.GetValue("Commands", "Teleport")) {
+                    player.Teleport(-2567,300,37);
+                    player.Message("Teleporting is in testing mode");
+                }
+
+                if (cmd.cmd == "admintesting7") {
+                    player.basePlayer.IsAdmin();
+                    player.basePlayer.TakeDamage(-200f);
+                }
             }
+
             OnCommand.OnNext(cmd);
 
             if (cmd.ReplyWith != "")
